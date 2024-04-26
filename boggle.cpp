@@ -10,6 +10,7 @@
 #endif
 
 #include "boggle.h"
+using namespace std;
 
 std::vector<std::vector<char> > genBoard(unsigned int n, int seed)
 {
@@ -75,6 +76,7 @@ std::pair<std::set<std::string>, std::set<std::string> > parseDict(std::string f
 	return make_pair(dict, prefix);
 }
 
+//starting letter
 std::set<std::string> boggle(const std::set<std::string>& dict, const std::set<std::string>& prefix, const std::vector<std::vector<char> >& board)
 {
 	std::set<std::string> result;
@@ -94,6 +96,25 @@ std::set<std::string> boggle(const std::set<std::string>& dict, const std::set<s
 bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>& prefix, const std::vector<std::vector<char> >& board, 
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
-//add your solution here!
+	//add your solution here!
+	if(r>=board.size() || c>=board.size()){ //check out of bounds
+		return false;
+	}
 
+	word += board[r][c];
+	if(prefix.find(word)!=prefix.end()){ //valid prefix
+		bool check = boggleHelper(dict, prefix, board, word, result, r+dr, c+dc, dr, dc);
+		if(check){
+			return true; //done
+		}
+	}
+
+	if(dict.find(word)!=dict.end()){ //valid word
+		result.insert(word);
+		return true;
+	}
+
+	return false;
 }
+
+
